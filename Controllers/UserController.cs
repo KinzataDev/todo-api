@@ -16,24 +16,25 @@ namespace TodoApi.Controllers
   {
 
     ILogger<UserController> _logger;
-    private readonly TodoContext _context;
+    private readonly IUserRepository _repository;
 
-    public UserController(ILogger<UserController> logger, TodoContext context)
+    public UserController(ILogger<UserController> logger, IUserRepository repository)
     {
       _logger = logger;
-      _context = context;
+      _repository = repository;
     }
 
     [HttpGet]
     public IEnumerable<User> GetAll()
     {
-        return _context.Users.ToList();
+        // Return all
+        return _repository.Find("");
     }
 
     [HttpGet("{id}", Name = "GetUser")]
     public IActionResult GetById(long id)
     {
-        var user = _context.Users.FirstOrDefault(t => t.UserId == id);
+        var user = _repository.GetById( id );
         if (user == null)
         {
             return NotFound();
@@ -49,16 +50,13 @@ namespace TodoApi.Controllers
             return BadRequest();
         }
 
-        var updatedUser = _context.Users.FirstOrDefault(t => t.UserId == id);
-        if (updatedUser == null)
+        var oldUser = _repository.GetById( id );
+        if (oldUser == null)
         {
             return NotFound();
         }
 
-        updatedUser.Name = user.Name;
-
-        _context.Users.Update(updatedUser);
-        _context.SaveChanges();
+        _repository.UpdateUser(oldUser, user);
         return new NoContentResult();
     }
   }

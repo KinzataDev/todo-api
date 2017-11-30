@@ -38,5 +38,9 @@ namespace TodoApi.Data {
             DbContext.Entry(entity).State = EntityState.Modified;
             DbContext.SaveChanges();
         }
+
+        public void SaveChanges() {
+            DbContext.SaveChanges();
+        }
     }
 }
