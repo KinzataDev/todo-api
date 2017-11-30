@@ -2,7 +2,9 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace TodoApi.Models
+using TodoApi.Models;
+
+namespace TodoApi.Data
 {
 
   public class TodoContext : DbContext
