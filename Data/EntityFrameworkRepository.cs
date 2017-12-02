@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace TodoApi.Data {
@@ -37,6 +38,10 @@ namespace TodoApi.Data {
             DbContext.Set<TEntity>().Attach(entity);
             DbContext.Entry(entity).State = EntityState.Modified;
             DbContext.SaveChanges();
+        }
+
+        public IQueryable<TEntity> GetEntities() {
+            return DbContext.Set<TEntity>();
         }
 
         public void SaveChanges() {

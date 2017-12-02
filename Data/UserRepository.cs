@@ -11,10 +11,6 @@ namespace TodoApi.Data {
             _dbContext = dbContext;
         }
 
-        public IEnumerable<User> Find(string text) {
-            return _dbContext.Users.Where( x => x.Name.Contains( text ) ).ToList();
-        }
-
         public void UpdateUser(User oldEntity, User newEntity)
         {
             oldEntity.Name = newEntity.Name;

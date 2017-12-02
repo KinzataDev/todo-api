@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 
-using TodoApi.Data;
+using TodoApi.Services;
 using TodoApi.Models;
 
 namespace TodoApi.Controllers
@@ -16,25 +16,32 @@ namespace TodoApi.Controllers
   {
 
     ILogger<UserController> _logger;
-    private readonly IUserRepository _repository;
+    private readonly IUserService _userService;
 
-    public UserController(ILogger<UserController> logger, IUserRepository repository)
+    public UserController(ILogger<UserController> logger, IUserService service)
     {
       _logger = logger;
-      _repository = repository;
+      _userService = service;
     }
 
     [HttpGet]
+    /*
+    GET
+    api/user
+     */
     public IEnumerable<User> GetAll()
     {
-        // Return all
-        return _repository.Find("");
+        return _userService.GetAllUsers();
     }
 
     [HttpGet("{id}", Name = "GetUser")]
+    /*
+    GET
+    api/user/:id
+     */
     public IActionResult GetById(long id)
     {
-        var user = _repository.GetById( id );
+        var user = _userService.FindUserById( id );
         if (user == null)
         {
             return NotFound();
@@ -43,6 +50,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpPut("{id}")]
+    /*
+    PUT
+    api/user/:id
+     */
     public IActionResult Update(long id, [FromBody] User user)
     {
         if (user == null || user.UserId != id)
@@ -50,13 +61,13 @@ namespace TodoApi.Controllers
             return BadRequest();
         }
 
-        var oldUser = _repository.GetById( id );
+        var oldUser = _userService.FindUserById( id );
         if (oldUser == null)
         {
             return NotFound();
         }
 
-        _repository.UpdateUser(oldUser, user);
+        _userService.UpdateUser(oldUser, user);
         return new NoContentResult();
     }
   }
