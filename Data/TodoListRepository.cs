@@ -3,10 +3,10 @@ using System.Linq;
 using TodoApi.Models;
 
 namespace TodoApi.Data {
-        public class UserRepository : EntityFrameworkRepository<User, long>, IUserRepository
+        public class TodoListRepository : EntityFrameworkRepository<TodoList, long>, ITodoListRepository
     {
         private readonly TodoContext _dbContext;
-        public UserRepository(TodoContext dbContext) : base(dbContext)
+        public TodoListRepository(TodoContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }

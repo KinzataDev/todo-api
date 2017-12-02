@@ -5,34 +5,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using TodoApi.Data;
+using TodoApi.Services;
 using TodoApi.Models;
 
 namespace TodoApi.Controllers
 {
 
   [Route("api/[controller]")]
-  public class ListController : Controller
+  public class TodoListController : Controller
   {
 
-    ILogger<ListController> _logger;
-    private readonly TodoContext _context;
+    ILogger<TodoListController> _logger;
+    private readonly ITodoListService _service;
 
-    public ListController(ILogger<ListController> logger, TodoContext context)
+    public TodoListController(ILogger<TodoListController> logger, ITodoListService service)
     {
       _logger = logger;
-      _context = context;
+      _service = service;
     }
 
     [HttpGet]
     public IEnumerable<TodoList> GetAll()
     {
-        return _context.TodoLists.ToList();
+        return _service.GetAllTodoLists();
     }
 
     [HttpGet("{id}", Name = "GetTodoList")]
     public IActionResult GetById(long id)
     {
-        var item = _context.TodoLists.FirstOrDefault(t => t.TodoListId == id);
+        var item = _service.FindTodoListById( id );
         if (item == null)
         {
             return NotFound();
@@ -47,9 +48,8 @@ namespace TodoApi.Controllers
         {
             return BadRequest();
         }
-
-        _context.TodoLists.Add(todoList);
-        _context.SaveChanges();
+        
+        _service.AddTodoList(todoList);
 
         return CreatedAtRoute("GetTodoList", new { id = todoList.TodoListId }, todoList);
     }
@@ -62,30 +62,26 @@ namespace TodoApi.Controllers
             return BadRequest();
         }
 
-        var todo = _context.TodoLists.FirstOrDefault(t => t.TodoListId == id);
+        var todo = _service.FindTodoListById( id );
         if (todo == null)
         {
             return NotFound();
         }
 
-        todo.Name = todoList.Name;
-
-        _context.TodoLists.Update(todo);
-        _context.SaveChanges();
+        _service.UpdateTodoList(todo, todoList);
         return new NoContentResult();
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(long id)
     {
-        var todo = _context.TodoLists.FirstOrDefault(t => t.TodoListId == id);
+        var todo = _service.FindTodoListById( id );
         if (todo == null)
         {
             return NotFound();
         }
 
-        _context.TodoLists.Remove(todo);
-        _context.SaveChanges();
+        _service.DeleteTodoList(todo);
         return new NoContentResult();
     }
   }
