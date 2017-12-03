@@ -35,7 +35,7 @@ namespace TodoApi
             services.AddScoped<ITodoListRepository, TodoListRepository>();
             services.AddScoped<ITodoListService, TodoListService>();
             // Item
-            services.AddScoped<IItemRepository, IItemRepository>();
+            services.AddScoped<IItemRepository, ItemRepository>();
             services.AddScoped<IItemService, ItemService>();
         }
 
