@@ -13,6 +13,10 @@ namespace TodoApi.Services {
         public UserService(IUserRepository userRepository) {
             _userRepository = userRepository;
         }
+        public void AddUser(User user)
+        {
+            _userRepository.Create(user);
+        }
         public User FindUserById( long id ) {
             return _userRepository.GetById(id);
         }

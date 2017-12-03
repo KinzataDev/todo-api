@@ -17,6 +17,11 @@ namespace TodoApi.Services
 
         public void AddTodoList(TodoList todoList)
         {
+            // Need to add the User if an ID is passed in
+            if( todoList.UserId == null) {
+                throw new ArgumentException("UserId is required to create a TodoList.");
+            }
+
             _repository.Create(todoList);
         }
 

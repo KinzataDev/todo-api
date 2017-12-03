@@ -19,6 +19,7 @@ namespace TodoApi.Data {
         {
             if (entity == null) throw new ArgumentNullException("entity");
             DbContext.Set<TEntity>().Add(entity);
+            SaveChanges();
         }
         public TEntity GetById(TKey id)
         {
@@ -29,7 +30,7 @@ namespace TodoApi.Data {
             if (entity == null) throw new ArgumentNullException("entity");
             DbContext.Set<TEntity>().Attach(entity);
             DbContext.Set<TEntity>().Remove(entity);
-            DbContext.SaveChanges();
+            SaveChanges();
 
         }
         public void Update(TEntity entity)
@@ -37,7 +38,7 @@ namespace TodoApi.Data {
             if (entity == null) throw new ArgumentNullException("entity");
             DbContext.Set<TEntity>().Attach(entity);
             DbContext.Entry(entity).State = EntityState.Modified;
-            DbContext.SaveChanges();
+            SaveChanges();
         }
 
         public IQueryable<TEntity> GetEntities() {

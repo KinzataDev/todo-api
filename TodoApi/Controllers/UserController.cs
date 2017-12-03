@@ -29,9 +29,9 @@ namespace TodoApi.Controllers
     GET
     api/user
      */
-    public IEnumerable<User> GetAll()
+    public IActionResult Index()
     {
-        return _userService.GetAllUsers();
+        return new ObjectResult(_userService.GetAllUsers());
     }
 
     [HttpGet("{id}", Name = "GetUser")]
@@ -69,6 +69,23 @@ namespace TodoApi.Controllers
 
         _userService.UpdateUser(oldUser, user);
         return new NoContentResult();
+    }
+
+    [HttpPost]
+    /*
+    POST
+    api/user
+     */
+    public IActionResult Create([FromBody] User user)
+    {
+        if (user == null)
+        {
+            return BadRequest();
+        }
+
+        _userService.AddUser( user );
+
+        return CreatedAtRoute("GetUser", new { id = user.UserId }, user);
     }
   }
 }

@@ -9,6 +9,8 @@ namespace TodoApi.Services {
         IEnumerable<User> GetAllUsers();
         IEnumerable<User> FindUserByName( string text );
         
+        void AddUser( User user );
+
         User UpdateUser(User oldUser, User newUser);
     }
 }

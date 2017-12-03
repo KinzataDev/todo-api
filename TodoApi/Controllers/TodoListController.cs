@@ -29,7 +29,7 @@ namespace TodoApi.Controllers
     GET
     api/todolist
      */
-    public IEnumerable<TodoList> GetAll()
+    public IEnumerable<TodoList> Index()
     {
         return _service.GetAllTodoLists();
     }

@@ -94,7 +94,7 @@ namespace TodoApi.Controllers
         return new NoContentResult();
     }
 
-    [HttpPost]
+    [HttpPost("{id}/togglecompleted")]
     /*
     POST
     api/item/:id

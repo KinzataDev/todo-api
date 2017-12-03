@@ -10,6 +10,5 @@ namespace TodoApi.Models
         public bool IsComplete { get; set; }
 
         public long TodoListId{ get; set; }
-        public virtual TodoList TodoList { get; set; }
     }
 }
