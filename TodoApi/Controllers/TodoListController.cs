@@ -25,12 +25,20 @@ namespace TodoApi.Controllers
     }
 
     [HttpGet]
+    /*
+    GET
+    api/todolist
+     */
     public IEnumerable<TodoList> GetAll()
     {
         return _service.GetAllTodoLists();
     }
 
     [HttpGet("{id}", Name = "GetTodoList")]
+    /*
+    GET
+    api/todolist/:id
+     */
     public IActionResult GetById(long id)
     {
         var item = _service.FindTodoListById( id );
@@ -42,6 +50,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpPost]
+    /*
+    POST
+    api/todolist
+     */
     public IActionResult Create([FromBody] TodoList todoList)
     {
         if (todoList == null)
@@ -55,6 +67,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpPut("{id}")]
+    /*
+    PUT
+    api/todolist/:id
+     */
     public IActionResult Update(long id, [FromBody] TodoList todoList)
     {
         if (todoList == null || todoList.TodoListId != id)
@@ -73,6 +89,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpDelete("{id}")]
+    /*
+    DELETE
+    api/todolist/:id
+     */
     public IActionResult Delete(long id)
     {
         var todo = _service.FindTodoListById( id );

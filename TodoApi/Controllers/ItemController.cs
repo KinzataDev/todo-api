@@ -24,6 +24,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpGet("{id}", Name = "GetItem")]
+    /*
+    GET
+    api/item/:id
+     */
     public IActionResult GetById(long id)
     {
         var item = _service.FindItemById( id );
@@ -35,6 +39,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpPost]
+    /*
+    POST
+    api/item
+     */
     public IActionResult Create([FromBody] Item item)
     {
         if (item == null)
@@ -48,6 +56,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpPut("{id}")]
+    /*
+    PUT
+    api/item/:id
+     */
     public IActionResult Update(long id, [FromBody] Item item)
     {
         if (item == null || item.ItemId != id)
@@ -66,6 +78,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpDelete("{id}")]
+    /*
+    DELETE
+    api/item/:id
+     */
     public IActionResult Delete(long id)
     {
         var item = _service.FindItemById( id );
@@ -79,6 +95,10 @@ namespace TodoApi.Controllers
     }
 
     [HttpPost]
+    /*
+    POST
+    api/item/:id
+     */
     public IActionResult ToggleCompleted( long id ) {
         var item = _service.FindItemById( id );
         if (item == null)
