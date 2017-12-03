@@ -28,8 +28,15 @@ namespace TodoApi
         {
             services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddMvc();
+            // User
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            // TodoList
+            services.AddScoped<ITodoListRepository, TodoListRepository>();
+            services.AddScoped<ITodoListService, TodoListService>();
+            // Item
+            services.AddScoped<IItemRepository, IItemRepository>();
+            services.AddScoped<IItemService, ItemService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

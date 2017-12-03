@@ -4,8 +4,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using TodoApi.Data;
 using TodoApi.Models;
+using TodoApi.Services;
 
 namespace TodoApi.Controllers
 {
@@ -15,24 +15,18 @@ namespace TodoApi.Controllers
   {
 
     ILogger<ItemController> _logger;
-    private readonly TodoContext _context;
+    private readonly IItemService _service;
 
-    public ItemController(ILogger<ItemController> logger, TodoContext context)
+    public ItemController(ILogger<ItemController> logger, IItemService service)
     {
       _logger = logger;
-      _context = context;
-    }
-
-    [HttpGet]
-    public IEnumerable<Item> GetAll()
-    {
-        return _context.Items.ToList();
+      _service = service;
     }
 
     [HttpGet("{id}", Name = "GetItem")]
     public IActionResult GetById(long id)
     {
-        var item = _context.Items.FirstOrDefault(t => t.ItemId == id);
+        var item = _service.FindItemById( id );
         if (item == null)
         {
             return NotFound();
@@ -48,8 +42,7 @@ namespace TodoApi.Controllers
             return BadRequest();
         }
 
-        _context.Items.Add(item);
-        _context.SaveChanges();
+        _service.AddItem( item );
 
         return CreatedAtRoute("GetItem", new { id = item.ItemId }, item);
     }
@@ -62,31 +55,37 @@ namespace TodoApi.Controllers
             return BadRequest();
         }
 
-        var updatedItem = _context.Items.FirstOrDefault(t => t.ItemId == id);
-        if (updatedItem == null)
+        var oldItem = _service.FindItemById( id );
+        if (oldItem == null)
         {
             return NotFound();
         }
 
-        updatedItem.Description = item.Description;
-        updatedItem.IsComplete  = item.IsComplete;
-
-        _context.Items.Update(updatedItem);
-        _context.SaveChanges();
+        _service.UpdateItem(oldItem, item);
         return new NoContentResult();
     }
 
     [HttpDelete("{id}")]
     public IActionResult Delete(long id)
     {
-        var item = _context.Items.FirstOrDefault(t => t.ItemId == id);
+        var item = _service.FindItemById( id );
         if (item == null)
         {
             return NotFound();
         }
 
-        _context.Items.Remove(item);
-        _context.SaveChanges();
+        _service.DeleteItem( item );
+        return new NoContentResult();
+    }
+
+    [HttpPost]
+    public IActionResult ToggleCompleted( long id ) {
+        var item = _service.FindItemById( id );
+        if (item == null)
+        {
+            return NotFound();
+        }
+        _service.ToggleCompleted( item );
         return new NoContentResult();
     }
   }
